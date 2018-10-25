@@ -2,7 +2,7 @@ function [handles] = amateur_loop(handles )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
-
+t_total=1800;% duree total de la session
 set(handles.Save_current_session_pushbutton5,'Visible','Off')% Cache le bouton save tant que le stop n'a pas été appuyé
 pos_courante = 1;% Pos Départ = 1
 Recompense_Beep(handles.session_daq,pos_courante,handles);% Sonne et distribue nourriture
@@ -17,25 +17,26 @@ pos_cible=1;
 handles.Stop.UserData=1;%variable qui gère la session
 handles.Reset.UserData=1;% variable qui reset le parcours courant
 
-while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition arrêt de la boucle
+while handles.Stop.UserData==1 && toc < t_total; %**********************Condition arrêt de la boucle
     drawnow()
   display('en attente')
     Val_passage=inputSingleScan(handles.session_daq);%
     det_1ou2=find(Val_passage(1:2)>0);%Détecte le rat
-    
-          
+   
+         
         if det_1ou2 ~= pos_cible; % il commence le parcours
             handles.Reset.UserData=1;% variable qui reset le parcours courant
             display('debut parcours')
             t_deb=toc;
-            display(handles.t_passage)
+           
             drawnow()
-            while handles.Reset.UserData==1;
+            while handles.Reset.UserData==1 && toc < t_total;
                 Val_passage=inputSingleScan(handles.session_daq);%
                 det_fin_parcours=find(Val_passage(pos_cible)>0);
                 temps_essais=toc-t_deb;
                
-                drawnow()   
+                display('debut parcours')
+               
                 
                 
                 if  temps_essais>30;
@@ -46,6 +47,11 @@ while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition 
                 if numel(det_fin_parcours)>0
                    t_fin=toc;
                    n_passage=n_passage+1;
+                   %Affichage du temps restant
+                   chronometre=num2str(round(t_total-toc,1));
+                   chronometre=strcat(chronometre,'_s');
+                   set(handles.timer_edit6,'String',chronometre);
+                   %---
                    set(handles.n_passage_edit1,'String',num2str(n_passage));
                    handles.t_passage(n_passage)=t_fin-t_deb;
                    handles.t_depart(n_passage)=t_deb+handles.t_depart_camera;
@@ -69,9 +75,6 @@ while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition 
 
 end
 
-handles.t_passage=handles.t_passage;
-handles.t_depart=handles.t_depart;
-                  
 
 drawnow();
 end

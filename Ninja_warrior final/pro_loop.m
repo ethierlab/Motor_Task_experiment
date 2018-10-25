@@ -8,6 +8,7 @@ Recompense_Beep(handles.session_daq,pos_courante,handles);% Sonne et distribue n
 tic;
 n_passage=0;
 handles.t_passage=[];
+handles.t_depart=[];
 handles.t_depart_camera=str2double(get(handles.delai_edit5,'String'));
 
 % Attend la première détection
@@ -15,7 +16,7 @@ pos_cible=1;
 handles.Stop.UserData=1;%variable qui gère la session
 handles.Reset.UserData=1;% variable qui reset le parcours courant
 
-while handles.Stop.UserData==1 && n_passage < 20 ;
+while handles.Stop.UserData==1 && n_passage < 50 ;
     drawnow()
   display('en attente')
     Val_passage=inputSingleScan(handles.session_daq);%

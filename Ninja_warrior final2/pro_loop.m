@@ -1,9 +1,8 @@
-function [handles] = amateur_loop(handles )
-%UNTITLED2 Summary of this function goes here
+function [  handles] = pro_loop(handles)
+%UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-
-set(handles.Save_current_session_pushbutton5,'Visible','Off')% Cache le bouton save tant que le stop n'a pas été appuyé
+    set(handles.Save_current_session_pushbutton5,'Visible','Off')% Cache le bouton save tant que le stop n'a pas été appuyé
 pos_courante = 1;% Pos Départ = 1
 Recompense_Beep(handles.session_daq,pos_courante,handles);% Sonne et distribue nourriture
 tic;
@@ -17,7 +16,7 @@ pos_cible=1;
 handles.Stop.UserData=1;%variable qui gère la session
 handles.Reset.UserData=1;% variable qui reset le parcours courant
 
-while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition arrêt de la boucle
+while handles.Stop.UserData==1 && n_passage < 50 ;
     drawnow()
   display('en attente')
     Val_passage=inputSingleScan(handles.session_daq);%
@@ -28,33 +27,27 @@ while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition 
             handles.Reset.UserData=1;% variable qui reset le parcours courant
             display('debut parcours')
             t_deb=toc;
-            display(handles.t_passage)
-            drawnow()
-            while handles.Reset.UserData==1;
+            
+            while handles.Reset.UserData==1 && n_passage < 50 ;
                 Val_passage=inputSingleScan(handles.session_daq);%
                 det_fin_parcours=find(Val_passage(pos_cible)>0);
                 temps_essais=toc-t_deb;
-               
-                drawnow()   
-                
-                
                 if  temps_essais>30;
                     break
                 end
-                
-                
                 if numel(det_fin_parcours)>0
                    t_fin=toc;
                    n_passage=n_passage+1;
                    set(handles.n_passage_edit1,'String',num2str(n_passage));
                    handles.t_passage(n_passage)=t_fin-t_deb;
                    handles.t_depart(n_passage)=t_deb+handles.t_depart_camera;
+
                    set(handles.t_last_edit2,'String',num2str(handles.t_passage(end)));
                    pos_cible=mod(n_passage,2)+1;
                    display(n_passage)
                    display(handles.t_passage)
                    pause(5);
-                
+                   
                    Recompense_Beep(handles.session_daq,pos_cible,handles)
                    
                    break
@@ -65,14 +58,8 @@ while handles.Stop.UserData==1 && toc < 1800 ; %**********************Condition 
            
         end
       
-        
-
+        drawnow()
 end
 
-handles.t_passage=handles.t_passage;
-handles.t_depart=handles.t_depart;
-                  
-
-drawnow();
 end
 

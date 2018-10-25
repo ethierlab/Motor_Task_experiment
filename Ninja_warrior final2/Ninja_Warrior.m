@@ -22,7 +22,7 @@ function varargout = Ninja_Warrior(varargin)
 
 % Edit the above text to modify the response to help Ninja_Warrior
 
-% Last Modified by GUIDE v2.5 25-Sep-2018 13:46:57
+% Last Modified by GUIDE v2.5 23-Oct-2018 11:08:08
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -120,10 +120,11 @@ function Stop_Callback(hObject, eventdata, handles)
 % hObject    handle to Stop (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+handles.Reset.UserData=0;
 handles.Stop.UserData=0;
-%handles.Reset.UserData=0;
 set(handles.Save_current_session_pushbutton5,'Visible','On')
-display(handles.t_passage)
+
 % Update handles structure
 guidata(hObject, handles);
 
@@ -307,6 +308,29 @@ function delai_edit5_Callback(hObject, eventdata, handles)
 % --- Executes during object creation, after setting all properties.
 function delai_edit5_CreateFcn(hObject, eventdata, handles)
 % hObject    handle to delai_edit5 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function timer_edit6_Callback(hObject, eventdata, handles)
+% hObject    handle to timer_edit6 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of timer_edit6 as text
+%        str2double(get(hObject,'String')) returns contents of timer_edit6 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function timer_edit6_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to timer_edit6 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    empty - handles not created until after all CreateFcns called
 
